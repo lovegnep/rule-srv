@@ -42,6 +42,7 @@ func NewRuleSrvEndpoints() []*api.Endpoint {
 // Client API for RuleSrv service
 
 type RuleSrvService interface {
+	Event(ctx context.Context, in *EventRequest, opts ...client.CallOption) (*EventResponse, error)
 	Call(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	Stream(ctx context.Context, in *StreamingRequest, opts ...client.CallOption) (RuleSrv_StreamService, error)
 	PingPong(ctx context.Context, opts ...client.CallOption) (RuleSrv_PingPongService, error)
@@ -57,6 +58,16 @@ func NewRuleSrvService(name string, c client.Client) RuleSrvService {
 		c:    c,
 		name: name,
 	}
+}
+
+func (c *ruleSrvService) Event(ctx context.Context, in *EventRequest, opts ...client.CallOption) (*EventResponse, error) {
+	req := c.c.NewRequest(c.name, "RuleSrv.Event", in)
+	out := new(EventResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *ruleSrvService) Call(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
@@ -172,6 +183,7 @@ func (x *ruleSrvServicePingPong) Recv() (*Pong, error) {
 // Server API for RuleSrv service
 
 type RuleSrvHandler interface {
+	Event(context.Context, *EventRequest, *EventResponse) error
 	Call(context.Context, *Request, *Response) error
 	Stream(context.Context, *StreamingRequest, RuleSrv_StreamStream) error
 	PingPong(context.Context, RuleSrv_PingPongStream) error
@@ -179,6 +191,7 @@ type RuleSrvHandler interface {
 
 func RegisterRuleSrvHandler(s server.Server, hdlr RuleSrvHandler, opts ...server.HandlerOption) error {
 	type ruleSrv interface {
+		Event(ctx context.Context, in *EventRequest, out *EventResponse) error
 		Call(ctx context.Context, in *Request, out *Response) error
 		Stream(ctx context.Context, stream server.Stream) error
 		PingPong(ctx context.Context, stream server.Stream) error
@@ -192,6 +205,10 @@ func RegisterRuleSrvHandler(s server.Server, hdlr RuleSrvHandler, opts ...server
 
 type ruleSrvHandler struct {
 	RuleSrvHandler
+}
+
+func (h *ruleSrvHandler) Event(ctx context.Context, in *EventRequest, out *EventResponse) error {
+	return h.RuleSrvHandler.Event(ctx, in, out)
 }
 
 func (h *ruleSrvHandler) Call(ctx context.Context, in *Request, out *Response) error {

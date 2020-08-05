@@ -3,9 +3,20 @@ syntax = "proto3";
 package go.micro.service.rulesrv;
 
 service RuleSrv {
+	rpc Event(EventRequest) returns (EventResponse) {}
 	rpc Call(Request) returns (Response) {}
 	rpc Stream(StreamingRequest) returns (stream StreamingResponse) {}
 	rpc PingPong(stream Ping) returns (stream Pong) {}
+}
+
+message EventRequest{
+	string userId = 1;
+	int32 event = 2;
+	string refId = 3;
+}
+
+message EventResponse{
+	int32 status = 1;
 }
 
 message Message {
