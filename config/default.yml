@@ -1,0 +1,5 @@
+# 审批超时时间 小时
+timeout: 5
+redis:
+  # redis://user:pass@127.0.0.1:6379
+  url: redis://127.0.0.1:6379
