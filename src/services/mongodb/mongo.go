@@ -10,22 +10,23 @@ import (
 	"time"
 )
 
-var Client *mongo.Client
+var Client *mongo.Database
 
 func init() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	Client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.Cfg.Mongodb.Url))
+	tmp, err := mongo.Connect(ctx, options.Client().ApplyURI(config.Cfg.Mongodb.Url))
 	if err != nil {
 		util.Sugar.Infow("mongodb connect fail")
 		panic(err)
 	}
 	ctx, cancel = context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	err = Client.Ping(ctx, readpref.Primary())
+	err = tmp.Ping(ctx, readpref.Primary())
 	if err != nil {
 		util.Sugar.Infow("mongodb ping fail")
 		panic(err)
 	}
+	Client = tmp.Database("rule")
 	util.Sugar.Infow("mongodb connected.")
 }
