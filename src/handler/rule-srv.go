@@ -10,6 +10,11 @@ import (
 
 type RuleSrv struct{}
 
+func (e *RuleSrv) Event(ctx context.Context, req *rulesrv.EventRequest, rsp *rulesrv.EventResponse) error {
+	rsp.Status = 1
+	return nil
+}
+
 // Call is a single request handler called via client.Call or the generated client code
 func (e *RuleSrv) Call(ctx context.Context, req *rulesrv.Request, rsp *rulesrv.Response) error {
 	log.Info("Received RuleSrv.Call request")

@@ -11,15 +11,20 @@ type RedisCfg struct {
 	Url string
 }
 
+type MongoCfg struct {
+	Url string
+}
+
 type Config struct {
 	Timeout int
 	Redis RedisCfg
+	Mongodb MongoCfg
 }
 
 var Cfg Config
 
 func init () {
-	if err := microConfig.Load(file.NewSource(file.WithPath("../../config/default.yml"))); err != nil {
+	if err := microConfig.Load(file.NewSource(file.WithPath("./config/default.yml"))); err != nil {
 		panic(err)
 	}
 	if err := microConfig.Scan(&Cfg); err != nil {
