@@ -2,15 +2,22 @@ package handler
 
 import (
 	"context"
+	"rule-srv/src/constants"
 
 	log "github.com/micro/go-micro/v2/logger"
 
 	rulesrv "rule-srv/proto/rule-srv"
+	"rule-srv/src/dao"
 )
 
 type RuleSrv struct{}
 
 func (e *RuleSrv) Event(ctx context.Context, req *rulesrv.EventRequest, rsp *rulesrv.EventResponse) error {
+	switch req.Event {
+	case constants.SickLeave:
+	case constants.Approve:
+
+	}
 	rsp.Status = 1
 	return nil
 }
