@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
@@ -9,6 +10,7 @@ import (
 	"rule-srv/src/config"
 	"rule-srv/src/constants"
 	"rule-srv/src/schema"
+	"rule-srv/src/services/redis"
 	"rule-srv/src/util"
 	"time"
 
@@ -75,20 +77,27 @@ func (e *RuleSrv) Event(ctx context.Context, req *rulesrv.EventRequest, rsp *rul
 			return err
 		}
 		if result.ModifiedCount != 1 {
-			return errors.New("refId not exist or timeout or has been approved.")
+			return errors.New("RuleSrv.Event:refId not exist or timeout or has been approved.")
 		}
 
 		// 记录日志
-		_, err = dao.LogDao.Create(ctx, schema.Log{
+		log := schema.Log{
 			UserID:    targetUserID,
 			EventType: constants.GoToDoctor,
 			Created:   time.Now(),
 			Updated:   time.Now(),
-		})
+		}
+		_, err = dao.LogDao.Create(ctx, log)
 		if err != nil {
-			util.Sugar.Error("create log fail", err.Error(), targetUserID.String(), constants.GoToDoctor)
+			util.Sugar.Error("RuleSrv.Event:create log fail", err.Error(), targetUserID.String(), constants.GoToDoctor)
 		}
 		// 发送通知到消息队列
+		content, err := json.Marshal(log)
+		if err != nil {
+			util.Sugar.Error("RuleSrv.Event: marchal fail", err.Error())
+		} else {
+			e.notify(ctx, string(content))
+		}
 	}
 	userID, err := primitive.ObjectIDFromHex(req.UserId)
 	if err != nil {
@@ -148,4 +157,14 @@ func (e *RuleSrv) PingPong(ctx context.Context, stream rulesrv.RuleSrv_PingPongS
 			return err
 		}
 	}
+}
+
+func (e *RuleSrv) notify(ctx context.Context, content string) error {
+	conn := redis.GetClient()
+	defer conn.Close()
+	_, err := conn.Do("rpush", "gotodoctor", content)
+	if err != nil {
+		return err
+	}
+	return nil
 }
