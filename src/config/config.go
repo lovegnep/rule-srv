@@ -9,6 +9,10 @@ import (
 
 type RedisCfg struct {
 	Url string
+	MaxIdle int
+	MaxActive int
+	Wait bool
+	MaxIdleTimeout int
 }
 
 type MongoCfg struct {

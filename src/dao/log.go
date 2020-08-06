@@ -8,7 +8,7 @@ import(
 	"rule-srv/src/services/mongodb"
 )
 
-var LogDao *Event
+var LogDao *Log
 
 type Log struct {
 	db *mongo.Collection

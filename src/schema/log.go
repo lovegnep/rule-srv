@@ -2,10 +2,13 @@ package schema
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 type Log struct {
-	ID primitive.ObjectID `bson:"_id" json:"_id"`
-	UserID primitive.ObjectID `bson:"_userId" json:"_userId"`
-	EventType int32 `bson:"eventType" json:"eventType"`
+	ID        primitive.ObjectID `bson:"_id" json:"_id"`
+	UserID    primitive.ObjectID `bson:"_userId" json:"_userId"`
+	EventType int32              `bson:"eventType" json:"eventType"`
+	Created   time.Time          `bson:"created" json:"created"`
+	Updated   time.Time          `bson:"updated" json:"updated"`
 }

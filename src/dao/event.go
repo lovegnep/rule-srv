@@ -38,10 +38,18 @@ func (e *Event) Find (ctx context.Context, query bson.M) ([]schema.Event, error)
 	return events, nil
 }
 
-func (e *Event) FindOne (ctx context.Context, query bson.M) (*schema.Event, error) {
+func (e *Event) FindOne (ctx context.Context, query bson.D) (*schema.Event, error) {
 	var event schema.Event
 	if err := e.db.FindOne(ctx, query).Decode(&event); err != nil {
 		return nil, err
 	}
 	return &event, nil
+}
+
+func (e *Event) UpdateOne (ctx context.Context, query, update bson.D) (*mongo.UpdateResult, error) {
+	rsp, err := e.db.UpdateOne(ctx, query, update)
+	if err != nil {
+		return nil, err
+	}
+	return rsp, nil
 }

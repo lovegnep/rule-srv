@@ -5,3 +5,8 @@ redis:
   url: redis://127.0.0.1:6379
 mongodb:
   url: mongodb://127.0.0.1:27017
+  maxIdle: 10
+  maxActive: 500
+  wait: true
+  # 秒
+  maxIdleTimeout: 10
