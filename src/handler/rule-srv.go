@@ -166,5 +166,6 @@ func (e *RuleSrv) notify(ctx context.Context, content string) error {
 	if err != nil {
 		return err
 	}
+	util.Sugar.Info("notify: notify success.")
 	return nil
 }
