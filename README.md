@@ -1,53 +1,42 @@
 # RuleSrv Service
 
-This is the RuleSrv service
-
-Generated with
+该服务由以下命令产生
 
 ```
 micro new --namespace=go.micro --type=service rule-srv
 ```
 
-## Getting Started
+## 用法
 
-- [Configuration](#configuration)
-- [Dependencies](#dependencies)
-- [Usage](#usage)
+该demo集成了makefile
 
-## Configuration
-
-- FQDN: go.micro.service.rule-srv
-- Type: service
-- Alias: rule-srv
-
-## Usage
-
-A Makefile is included for convenience
-
-Build the binary
+构建可执行文件
 
 ```
 make build
 ```
 
-Run the service
+运行服务
 ```
 ./rule-srv-service
 ```
 
-Build a docker image
+构建镜像
 ```
 make docker
 ```
 
 ## 依赖
 
-运行前请先安装mongodb与redis，并修改配置文件。
+请先安装mongodb和redis，并修改对应的配置
+
+另外，以下依赖也需要安装
+```
 brew install protobuf
 go get -u github.com/golang/protobuf/proto
 go get -u github.com/golang/protobuf/protoc-gen-go
 go get github.com/micro/protoc-gen-micro/v2
-
+```
 
 ## 数据模型
 
