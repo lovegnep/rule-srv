@@ -31,6 +31,17 @@ func (e *RuleSrv) Event(ctx context.Context, req *rulesrv.EventRequest, rsp *rul
 	switch req.Event {
 	case constants.SickLeave:
 		notify = false
+		userID, err := primitive.ObjectIDFromHex(req.UserId)
+		if err != nil {
+			return err
+		}
+		query = bson.D{
+			{"_userId", userID},
+			{"created", bson.D{{"$gt", time.Now().Add(dur)}}},
+			{"status", constants.EventStatusInit},
+		}
+		event, err := dao.EventDao.FindOne(ctx, query)
+		fmt.Println(event, err)
 	case constants.Approve:
 		if req.RefId == "" {
 			return errors.New("refId is not valid.")
