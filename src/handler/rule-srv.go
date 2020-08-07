@@ -69,6 +69,8 @@ func (e *RuleSrv) Event(ctx context.Context, req *rulesrv.EventRequest, rsp *rul
 				{"updated", time.Now()},
 			}},
 		}
+	default:
+		return errors.New("RuleSrv.Event:invalid event.")
 	}
 	if notify {
 		// 更新之前病假的事件状态
@@ -105,7 +107,7 @@ func (e *RuleSrv) Event(ctx context.Context, req *rulesrv.EventRequest, rsp *rul
 	}
 	event := schema.Event{
 		UserID:    userID,
-		EventType: 0,
+		EventType: req.Event,
 		Status:    constants.EventStatusInit,
 		Created:   time.Now(),
 		Updated:   time.Now(),

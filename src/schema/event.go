@@ -6,11 +6,11 @@ import (
 )
 
 type Event struct {
-	ID primitive.ObjectID `bson:"_id" json:"_id"`
-	UserID primitive.ObjectID `bson:"_userId" json:"_userId"`
-	EventType int32 `bson:"eventType" json:"eventType"`
-	RefID primitive.ObjectID `bson:"_refId" json:"_refId"`
-	Status int32 `bson:"status" json:"status"`
-	Created time.Time `bson:"created" json:"created"`
-	Updated time.Time `bson:"updated" json:"updated"`
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	UserID    primitive.ObjectID `bson:"_userId,omitempty" json:"_userId"`
+	EventType int32              `bson:"eventType,omitempty" json:"eventType"`
+	RefID     primitive.ObjectID `bson:"_refId,omitempty" json:"_refId"`
+	Status    int32              `bson:"status,omitempty" json:"status"`
+	Created   time.Time          `bson:"created,omitempty" json:"created"`
+	Updated   time.Time          `bson:"updated,omitempty" json:"updated"`
 }

@@ -15,7 +15,7 @@ type Log struct {
 }
 
 func init() {
-	EventDao = &Event{db:mongodb.Client.Collection("log")}
+	LogDao = &Log{db:mongodb.Client.Collection("log")}
 }
 
 func (e *Log) Create (ctx context.Context, event schema.Log) (interface{}, error) {

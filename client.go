@@ -1,11 +1,13 @@
 
 package main
-/*
+
 import (
 	"context"
 	"fmt"
 	"github.com/micro/go-micro/v2"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	rulesrv "rule-srv/proto/rule-srv"
+	"rule-srv/src/constants"
 )
 
 func main() {
@@ -20,9 +22,9 @@ func main() {
 
 	client := rulesrv.NewRuleSrvService("go.micro.service.rule-srv", service.Client())
 	rsp, err := client.Event(context.TODO(), &rulesrv.EventRequest{
-		UserId: "111",
-		Event:  0,
-		RefId:  "2222",
+		UserId: primitive.NewObjectID().Hex(),
+		Event:  constants.SickLeave,
+		//RefId:  "2222",
 	})
 	if err != nil {
 		fmt.Println("rsp error:", err.Error())
@@ -30,4 +32,3 @@ func main() {
 	}
 	fmt.Println(rsp)
 }
-*/
