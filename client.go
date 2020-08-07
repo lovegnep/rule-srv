@@ -23,8 +23,8 @@ func main() {
 	client := rulesrv.NewRuleSrvService("go.micro.service.rule-srv", service.Client())
 	rsp, err := client.Event(context.TODO(), &rulesrv.EventRequest{
 		UserId: primitive.NewObjectID().Hex(),
-		Event:  constants.SickLeave,
-		//RefId:  "2222",
+		Event:  constants.Approve,
+		RefId:  "5f2d41c2e9b624581d8b2807",
 	})
 	if err != nil {
 		fmt.Println("rsp error:", err.Error())

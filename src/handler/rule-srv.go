@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"rule-srv/src/config"
 	"rule-srv/src/constants"
 	"rule-srv/src/schema"
@@ -40,8 +41,10 @@ func (e *RuleSrv) Event(ctx context.Context, req *rulesrv.EventRequest, rsp *rul
 			{"created", bson.D{{"$gt", time.Now().Add(dur)}}},
 			{"status", constants.EventStatusInit},
 		}
-		event, err := dao.EventDao.FindOne(ctx, query)
-		fmt.Println(event, err)
+		_, err = dao.EventDao.FindOne(ctx, query)
+		if err != mongo.ErrNoDocuments {
+			return errors.New("there has one sickLeave")
+		}
 	case constants.Approve:
 		if req.RefId == "" {
 			return errors.New("refId is not valid.")

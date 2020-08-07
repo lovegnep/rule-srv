@@ -20,20 +20,6 @@ micro new --namespace=go.micro --type=service rule-srv
 - Type: service
 - Alias: rule-srv
 
-## Dependencies
-
-Micro services depend on service discovery. The default is multicast DNS, a zeroconf system.
-
-In the event you need a resilient multi-host setup we recommend etcd.
-
-```
-# install etcd
-brew install etcd
-
-# run etcd
-etcd
-```
-
 ## Usage
 
 A Makefile is included for convenience
@@ -53,6 +39,15 @@ Build a docker image
 ```
 make docker
 ```
+
+## 依赖
+
+运行前请先安装mongodb与redis，并修改配置文件。
+brew install protobuf
+go get -u github.com/golang/protobuf/proto
+go get -u github.com/golang/protobuf/protoc-gen-go
+go get github.com/micro/protoc-gen-micro/v2
+
 
 ## 数据模型
 
